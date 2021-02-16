@@ -11,7 +11,11 @@ function main {
   solution_dir="${2}"
   output_dir="${3}"
   test_files=$(find "${solution_dir}" -type f -name '*Test.php' | tr '\n' ' ')
-  eval "${PHPUNIT_BIN}" --log-junit "${output_dir%/}/${XML_RESULTS}" --no-configuration "${test_files%%*( )}"
+  eval "${PHPUNIT_BIN}" \
+    --log-junit "${output_dir%/}/${XML_RESULTS}" \
+    --verbose \
+    --no-configuration \
+    "${test_files%%*( )}"
 }
 
 function installed {
