@@ -20,11 +20,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node
 
+      - name: Update NPM
+        run: |
+          npm install -g npm@7.5.4
+
       - name: Build junit-to-json
         run: |
-          cd junit-to-json
-          npm install
+          cd junit-to-json && npm install
 
       - name: Jest tests
         run: |
-          npm run test
+          cd junit-to-json && npm run test
