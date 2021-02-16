@@ -9,3 +9,5 @@ output
 output.json
 results.xml
 results.json
+
+*.scratch
