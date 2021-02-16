@@ -2,10 +2,20 @@
   "name": "junit-to-json",
   "version": "1.0.0",
   "description": "translate phpunit junit to exercism json",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc ./**/*.ts"
   },
   "author": "Tim Austin (tim@neenjaw.com)",
-  "license": "AGPL-3.0-or-later"
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.5"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.24",
+    "@types/node": "^14.14.28",
+    "eslint": "^7.20.0",
+    "typescript": "^4.1.3"
+  }
 }
