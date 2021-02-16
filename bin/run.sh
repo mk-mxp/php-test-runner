@@ -12,13 +12,13 @@ function main {
   output_dir="${3}"
   test_files=$(find "${solution_dir}" -type f -name '*Test.php' | tr '\n' ' ')
 
-  set -e
+  set +e
   eval "${PHPUNIT_BIN}" \
     --log-junit "${output_dir%/}/${XML_RESULTS}" \
     --verbose \
     --no-configuration \
     "${test_files%%*( )}"
-  set +e
+  set -e
 
   node junit-to-json/dist/index.js \
     "${output_dir%/}/${XML_RESULTS}" \
