@@ -1,0 +1,26 @@
+name: Smoke Test
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-20.04
+
+    container:
+      image: php:8.0.2-cli-buster
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install / Build Dependencies
+        shell: bash
+        run: |
+          curl -Lo ./bin/phpunit-9.phar https://phar.phpunit.de/phpunit-9.phar
+          chmod +x bin/phpunit-9.phar
+
+      - name: Smoke Test
+        run: |
+          echo "smoking"
+
+      - name: Verify files present
+        run: ./.github/bin/check_files.sh
