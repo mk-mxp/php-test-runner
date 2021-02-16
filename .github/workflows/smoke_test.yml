@@ -12,11 +12,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install / Build Dependencies
+      - name: Install PHPUnit
         shell: bash
         run: |
           curl -Lo ./bin/phpunit-9.phar https://phar.phpunit.de/phpunit-9.phar
           chmod +x bin/phpunit-9.phar
+
+      - name: Build junit-to-json
+        shell: bash
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && \
+            apt-get install -y nodejs && \
+            npm install -g npm@7.5.4
+
+          cd junit-to-json
+          npm install
 
       - name: Smoke Test
         run: |

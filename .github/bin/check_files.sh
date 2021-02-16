@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function main {
-  expected_files=(metadata.json output error_log results.json output.json)
+  expected_files=(results.xml results.json)
 
   for file in ${expected_files[@]}; do
     if [[ ! -f "./test/${file}" ]]; then
