@@ -11,7 +11,7 @@ RUN curl -Lo bin/phpunit-9.phar https://phar.phpunit.de/phpunit-9.phar && \
 # Install Node
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && \
   apt-get install -y nodejs && \
-  npm install -g npm@latest
+  npm install -g npm@7.5.4
 
 # Create appuser
 RUN useradd -ms /bin/bash appuser
