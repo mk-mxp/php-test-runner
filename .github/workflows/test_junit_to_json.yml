@@ -1,0 +1,30 @@
+name: Smoke Test
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node
+
+      - name: Build junit-to-json
+        run: |
+          cd junit-to-json
+          npm install
+
+      - name: Jest tests
+        run: |
+          npm run test
