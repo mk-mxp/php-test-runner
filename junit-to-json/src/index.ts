@@ -1,26 +1,10 @@
 import * as fs from 'fs'
-import * as cheerio from 'cheerio'
-
-import { parseTestSuite, parseTestCase, CheerioRoot } from './lib'
+import { processXmlResult } from './lib'
 
 const [, , xmlResultPath, jsonResultPath] = process.argv
 
+console.log(`Converting '${xmlResultPath}' to ${jsonResultPath}`)
+
 const xml = fs.readFileSync(xmlResultPath)
-const $ = cheerio.load(xml)
-
-const result = processXmlResult($)
+const result = processXmlResult(xml)
 console.log(result)
-
-function processXmlResult($: CheerioRoot): TestSuite[] {
-  return $('testsuite')
-    .toArray()
-    .map((testSuiteEl) => {
-      const testSuite = parseTestSuite($(testSuiteEl))
-
-      testSuite.testCases = $('testcase')
-        .toArray()
-        .map((testCase) => parseTestCase($(testCase)))
-
-      return testSuite
-    })
-}

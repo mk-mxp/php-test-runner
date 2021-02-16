@@ -1,7 +1,30 @@
 import { load } from 'cheerio'
 
-export type CheerioRoot = ReturnType<typeof load>
-export type CheerioSelection = ReturnType<CheerioRoot>
+type CheerioRoot = ReturnType<typeof load>
+type CheerioSelection = ReturnType<CheerioRoot>
+
+export function processXmlResult(xmlContent: Buffer): TestSuite[] {
+  const $ = load(xmlContent)
+
+  return parseTestSuites($)
+}
+
+export function parseTestSuites($: CheerioRoot) {
+  return $('testsuites')
+    .children()
+    .toArray()
+    .map((testSuiteEl) => {
+      const selectedTestSuite = $(testSuiteEl)
+      const testSuite = parseTestSuite(selectedTestSuite)
+
+      testSuite.testCases = selectedTestSuite
+        .children()
+        .toArray()
+        .map((testCase) => parseTestCase($(testCase)))
+
+      return testSuite
+    })
+}
 
 export function parseTestSuite(testSuiteEl: CheerioSelection): TestSuite {
   return {
@@ -17,10 +40,20 @@ export function parseTestSuite(testSuiteEl: CheerioSelection): TestSuite {
 export function parseTestCase(testCaseEl: CheerioSelection): TestCase {
   const name = testCaseEl.attr('name') ?? null
   const failure = testCaseEl.find('failure')?.text() ?? null
+  const error = testCaseEl.find('error')?.text() ?? null
   const systemOut = testCaseEl.find('system-out')?.text() ?? null
 
   if (!name) {
     throw new Error('Test name not found. Check test suite test names')
+  }
+
+  if (error) {
+    return {
+      name,
+      status: 'error',
+      message: error,
+      output: systemOut,
+    }
   }
 
   if (failure) {

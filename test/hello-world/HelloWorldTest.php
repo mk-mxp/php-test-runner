@@ -156,4 +156,9 @@ class HelloWorldTest extends PHPUnit\Framework\TestCase
     {
         $this->assertArrayNotHasKey('foo', ['foo' => 'baz']);
     }
+
+    public function testThrownError(): void
+    {
+        throw new Exception('Testing Error');
+    }
 }

@@ -2,18 +2,20 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["ES2015"],
+
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "module": "ES2015",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": false,
+    "outDir": "dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true
   },
   "exclude": ["node_modules"],
-  "include": ["global.d.ts", "**/*.ts"]
+  "include": ["global.d.ts", "src/**/*.ts"]
 }
