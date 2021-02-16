@@ -1,0 +1,14 @@
+# Ignore git details
+.git
+.gitignore
+.github
+
+# Ignore run artifacts
+error_log
+metadata.json
+output
+output.json
+results.json
+
+# Ignore smoke test files
+test/
