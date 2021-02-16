@@ -10,7 +10,8 @@ RUN curl -Lo bin/phpunit-9.phar https://phar.phpunit.de/phpunit-9.phar && \
 
 # Install Node
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && \
-  apt-get install -y nodejs
+  apt-get install -y nodejs && \
+  npm install -g npm@latest
 
 # Create appuser
 RUN useradd -ms /bin/bash appuser
@@ -23,8 +24,10 @@ RUN curl -L -o /usr/local/bin/tooling_webserver \
 WORKDIR /opt/test-runner
 COPY . .
 
-RUN cd junit-to-json && npm install
+WORKDIR /opt/test-runner/junit-to-json
+RUN npm install --unsafe-perm
 
+WORKDIR /opt/test-runner
 USER appuser
 
 ENTRYPOINT ["/opt/test-runner/bin/run.sh"]

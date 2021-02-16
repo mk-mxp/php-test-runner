@@ -1,18 +1,28 @@
-type ExercismTestRunnerResult = ExercismTestRunnerResultV2
+type ExercismTestRunnerResult =
+  | ExercismTestRunnerPass
+  | ExercismTestRunnerFail
+  | ExercismTestRunnerError
 
-type ExercismTestRunnerResultV2 = {
+type ExercismTestRunnerPass = {
   version: 2
   tests: TestCase[]
-} & (
-  | {
-      status: 'error'
-      message: string
-    }
-  | {
-      status: 'pass' | 'fail'
-      message?: null
-    }
-)
+  status: 'pass'
+  message?: null
+}
+
+type ExercismTestRunnerFail = {
+  version: 2
+  tests: TestCase[]
+  status: 'fail'
+  message?: null
+}
+
+type ExercismTestRunnerError = {
+  version: 2
+  tests: TestCase[]
+  status: 'error'
+  message: string
+}
 
 type TestSuite = {
   tests: number

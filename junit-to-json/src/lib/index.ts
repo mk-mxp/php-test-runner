@@ -3,13 +3,29 @@ import { load } from 'cheerio'
 type CheerioRoot = ReturnType<typeof load>
 type CheerioSelection = ReturnType<CheerioRoot>
 
-export function processXmlResult(xmlContent: Buffer): TestSuite[] {
-  const $ = load(xmlContent)
-
-  return parseTestSuites($)
+function isTestCases(
+  testcases: TestCase[] | undefined
+): testcases is TestCase[] {
+  return testcases !== undefined
 }
 
-export function parseTestSuites($: CheerioRoot) {
+export function processXmlResult(xmlContent: Buffer): ExercismTestRunnerResult {
+  const $ = load(xmlContent)
+  const parsed = parseTestSuites($)
+
+  return {
+    version: 2,
+    tests: parsed
+      .map((suite) => suite.testCases)
+      .filter(isTestCases)
+      .flat(),
+    status: parsed.reduce((s: 'pass' | 'fail', testSuite: TestSuite) => {
+      return testSuite.errors !== 0 ? 'fail' : s
+    }, 'pass'),
+  }
+}
+
+export function parseTestSuites($: CheerioRoot): TestSuite[] {
   return $('testsuites')
     .children()
     .toArray()

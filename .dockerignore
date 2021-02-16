@@ -13,3 +13,6 @@ results.json
 
 # Ignore smoke test files
 test/
+
+junit-to-json/node_modules/
+junit-to-json/**/*.js

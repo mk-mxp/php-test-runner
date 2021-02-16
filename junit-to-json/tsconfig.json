@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["ES2015"],
+    "lib": ["ESNext"],
 
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
@@ -16,6 +16,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/**/*.test.ts"],
   "include": ["global.d.ts", "src/**/*.ts"]
 }

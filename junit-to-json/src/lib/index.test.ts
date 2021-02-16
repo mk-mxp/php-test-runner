@@ -1,6 +1,11 @@
 export {}
 import { load } from 'cheerio'
-import { parseTestCase, parseTestSuite, parseTestSuites } from './index'
+import {
+  parseTestCase,
+  parseTestSuite,
+  parseTestSuites,
+  processXmlResult,
+} from './index'
 
 describe('parseTestCase', () => {
   test('parses passing test', () => {
@@ -189,4 +194,74 @@ describe('parseTestSuites', () => {
       },
     ])
   })
+
+  test('parses 2 testsuites, each with tests', () => {
+    const xml = fullXmlExample()
+    const $ = load(xml)
+    const result = parseTestSuites($)
+
+    expect(result).toEqual([
+      {
+        assertions: 0,
+        errors: 1,
+        failures: 0,
+        skipped: 0,
+        testCases: [
+          {
+            message:
+              'HelloWorldTest::testAssertEqualsPassing\n    Error: Call to undefined function helloWorld()',
+            name: 'testAssertEqualsPassing',
+            output: '',
+            status: 'error',
+          },
+        ],
+        tests: 1,
+        warnings: 0,
+      },
+      {
+        assertions: 1,
+        errors: 0,
+        failures: 0,
+        skipped: 0,
+        testCases: [
+          {
+            name: 'testAssertEqualsPassing',
+            output: '',
+            status: 'pass',
+          },
+        ],
+        tests: 1,
+        warnings: 0,
+      },
+    ])
+  })
 })
+
+describe('processXmlResult', () => {
+  test('correct format returned for failing', () => {
+    const xml = fullXmlExample()
+    const xmlBuffer = Buffer.from(xml)
+    const result = processXmlResult(xmlBuffer)
+    expect(result).not.toBeNull()
+    expect(result.version).toEqual(2)
+    expect(result.status).toEqual('fail')
+    expect(result.tests).toHaveLength(2)
+  })
+})
+
+function fullXmlExample() {
+  return `
+    <?xml version="1.0" encoding="UTF-8"?>
+    <testsuites>
+      <testsuite name="HelloWorldTestFail" file="/opt/php-test-runner/test/hello-world/HelloWorldTest.php" tests="1" assertions="0" errors="1" warnings="0" failures="0" skipped="0" time="0.000087">
+        <testcase name="testAssertEqualsPassing" class="HelloWorldTest" classname="HelloWorldTest" file="/opt/php-test-runner/test/hello-world/HelloWorldTest.php" line="10" assertions="0" time="0.000087">
+          <error type="Error">HelloWorldTest::testAssertEqualsPassing
+    Error: Call to undefined function helloWorld()</error>
+        </testcase>
+      </testsuite>
+      <testsuite name="HelloWorldTestPass" file="/opt/php-test-runner/test/hello-world/HelloWorldTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.000095">
+        <testcase name="testAssertEqualsPassing" class="HelloWorldTest" classname="HelloWorldTest" file="/opt/php-test-runner/test/hello-world/HelloWorldTest.php" line="10" assertions="0" time="0.000087"/>
+      </testsuite>
+    </testsuites>
+  `
+}
