@@ -3,9 +3,15 @@
 set -euo pipefail
 
 PHPUNIT_BIN="./bin/phpunit-9.phar"
+XML_RESULTS='results.xml'
+JSON_RESULTS='results.json'
 
 function main {
-  echo "running"
+  exercise_slug="${1}"
+  solution_dir="${2}"
+  output_dir="${3}"
+  test_files=$(find "${solution_dir}" -type f -name '*Test.php' | tr '\n' ' ')
+  eval "${PHPUNIT_BIN}" --log-junit "${output_dir%/}/${XML_RESULTS}" --no-configuration "${test_files%%*( )}"
 }
 
 function installed {
@@ -36,7 +42,7 @@ elif [ ! -d "${3}" ]; then
   die "Exercise test output directory does not exist"
 fi
 
-deps=("${PHPUNIT_BIN}" node)
+deps=("${PHPUNIT_BIN}" node tr)
 for dep in "${deps[@]}"; do
   installed "${dep}" || die "Missing '${dep}'"
 done
