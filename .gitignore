@@ -1,1 +1,11 @@
+# Ignore PHPUnit bin download and run cache artifact
 bin/phpunit-9.phar
+.phpunit*.cache
+
+# Ignore run artifacts
+error_log
+metadata.json
+output
+output.json
+results.xml
+results.json

@@ -8,6 +8,7 @@ error_log
 metadata.json
 output
 output.json
+results.xml
 results.json
 
 # Ignore smoke test files

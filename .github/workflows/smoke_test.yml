@@ -20,7 +20,7 @@ jobs:
 
       - name: Smoke Test
         run: |
-          echo "smoking"
+          ./bin/run.sh hello-world ./test/hello-world ./test
 
       - name: Verify files present
         run: ./.github/bin/check_files.sh
