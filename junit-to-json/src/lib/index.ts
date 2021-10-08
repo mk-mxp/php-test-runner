@@ -10,7 +10,7 @@ function isTestCases(
 }
 
 export function processXmlResult(xmlContent: Buffer): ExercismTestRunnerResult {
-  const $ = load(xmlContent)
+  const $ = load(xmlContent, { xmlMode: true })
   const parsed = parseTestSuites($)
 
   return {
