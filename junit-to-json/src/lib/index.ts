@@ -19,8 +19,10 @@ export function processXmlResult(xmlContent: Buffer): ExercismTestRunnerResult {
       .map((suite) => suite.testCases)
       .filter(isTestCases)
       .flat(),
-    status: parsed.reduce((s: 'pass' | 'fail', testSuite: TestSuite) => {
-      return testSuite.errors !== 0 ? 'fail' : s
+    status: parsed.reduce<'pass' | 'fail'>((status, testSuite) => {
+      return testSuite.errors !== 0 || testSuite.failures !== 0
+        ? 'fail'
+        : status
     }, 'pass'),
   }
 }

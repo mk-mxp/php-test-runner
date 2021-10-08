@@ -265,3 +265,46 @@ function fullXmlExample() {
     </testsuites>
   `
 }
+
+describe('secondXmlExample', () => {
+  test('correct format returned for failing', () => {
+    const xml = secondXmlExample()
+    const xmlBuffer = Buffer.from(xml)
+    const result = processXmlResult(xmlBuffer)
+    expect(result).not.toBeNull()
+    expect(result.version).toEqual(2)
+    expect(result.status).toEqual('fail')
+    expect(result.tests).toHaveLength(1)
+  })
+})
+
+function secondXmlExample() {
+  return `
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="HammingTest" file="/solution/HammingTest.php" tests="8" assertions="8" errors="0" warnings="0" failures="3" skipped="0" time="0.000761">
+    <testcase name="testNoDifferenceBetweenIdenticalStrands" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="35" assertions="1" time="0.000224"/>
+    <testcase name="testCompleteHammingDistanceOfForSingleNucleotideStrand" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="40" assertions="1" time="0.000051"/>
+    <testcase name="testCompleteHammingDistanceForSmallStrand" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="45" assertions="1" time="0.000049"/>
+    <testcase name="testSmallHammingDistance" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="50" assertions="1" time="0.000044"/>
+    <testcase name="testSmallHammingDistanceInLongerStrand" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="55" assertions="1" time="0.000048"/>
+    <testcase name="testLargeHammingDistance" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="60" assertions="1" time="0.000124">
+      <failure type="PHPUnit\Framework\ExpectationFailedException">HammingTest::testLargeHammingDistance
+Failed asserting that 0 matches expected 4.
+
+/solution/HammingTest.php:62</failure>
+    </testcase>
+    <testcase name="testHammingDistanceInVeryLongStrand" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="65" assertions="1" time="0.000127">
+      <failure type="PHPUnit\Framework\ExpectationFailedException">HammingTest::testHammingDistanceInVeryLongStrand
+Failed asserting that 0 matches expected 9.
+
+/solution/HammingTest.php:67</failure>
+    </testcase>
+    <testcase name="testExceptionThrownWhenStrandsAreDifferentLength" class="HammingTest" classname="HammingTest" file="/solution/HammingTest.php" line="70" assertions="1" time="0.000095">
+      <failure type="PHPUnit\Framework\ExpectationFailedException">HammingTest::testExceptionThrownWhenStrandsAreDifferentLength
+Failed asserting that exception of type "InvalidArgumentException" is thrown.</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
+  `
+}
