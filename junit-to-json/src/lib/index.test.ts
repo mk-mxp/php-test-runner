@@ -274,7 +274,7 @@ describe('secondXmlExample', () => {
     expect(result).not.toBeNull()
     expect(result.version).toEqual(2)
     expect(result.status).toEqual('fail')
-    expect(result.tests).toHaveLength(1)
+    expect(result.tests).toHaveLength(8)
   })
 })
 
@@ -306,5 +306,33 @@ Failed asserting that exception of type "InvalidArgumentException" is thrown.</f
     </testcase>
   </testsuite>
 </testsuites>
+  `
+}
+
+describe('multipleTestPassXmlResult', () => {
+  test('correct format returned for failing', () => {
+    const xml = multipleTestXmlResult()
+    const xmlBuffer = Buffer.from(xml)
+    const result = processXmlResult(xmlBuffer)
+    expect(result).not.toBeNull()
+    expect(result.version).toEqual(2)
+    expect(result.status).toEqual('pass')
+    expect(result.tests).toHaveLength(6)
+  })
+})
+
+function multipleTestXmlResult() {
+  return `
+    <?xml version="1.0" encoding="UTF-8"?>
+    <testsuites>
+      <testsuite name="ReverseStringTest" file="/solution/ReverseStringTest.php" tests="6" assertions="6" errors="0" warnings="0" failures="0" skipped="0" time="0.000408">
+        <testcase name="testEmptyString" class="ReverseStringTest" classname="ReverseStringTest" file="/solution/ReverseStringTest.php" line="13" assertions="1" time="0.000142"/>
+        <testcase name="testWord" class="ReverseStringTest" classname="ReverseStringTest" file="/solution/ReverseStringTest.php" line="18" assertions="1" time="0.000059"/>
+        <testcase name="testCapitalizedWord" class="ReverseStringTest" classname="ReverseStringTest" file="/solution/ReverseStringTest.php" line="23" assertions="1" time="0.000048"/>
+        <testcase name="testSentenceWithPunctuation" class="ReverseStringTest" classname="ReverseStringTest" file="/solution/ReverseStringTest.php" line="28" assertions="1" time="0.000048"/>
+        <testcase name="testPalindrome" class="ReverseStringTest" classname="ReverseStringTest" file="/solution/ReverseStringTest.php" line="33" assertions="1" time="0.000048"/>
+        <testcase name="testEvenSizedWord" class="ReverseStringTest" classname="ReverseStringTest" file="/solution/ReverseStringTest.php" line="38" assertions="1" time="0.000063"/>
+      </testsuite>
+    </testsuites>
   `
 }
