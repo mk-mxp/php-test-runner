@@ -8,7 +8,9 @@ This is a minimal test runner for Exercism's v3 platform.  It meets the minimal 
 
 ### Dockerimage
 
-The website uses isolated docker images to run untrusted code in a sandbox.  Image consists of PHP 8.0.2 (PHPUnit 9) and Node 14 (npm 7.5.4). All final assets are built into the image, because the image does not have network access once in use.
+The website uses isolated docker images to run untrusted code in a sandbox.  Image consists of PHP 8.1.3 (PHPUnit 9) and Node 14 (npm 7.5.4). All final assets are built into the image, because the image does not have network access once in use.
+
+Includes php extensions: ds, intl
 
 ### Test runner
 
