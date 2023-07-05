@@ -8,7 +8,7 @@ This is a minimal test runner for Exercism's v3 platform.  It meets the minimal 
 
 ### Dockerimage
 
-The website uses isolated docker images to run untrusted code in a sandbox.  Image consists of PHP 8.1.3 (PHPUnit 9) and Node 14 (npm 7.5.4). All final assets are built into the image, because the image does not have network access once in use.
+The website uses isolated docker images to run untrusted code in a sandbox.  Image consists of PHP 8.2.7 (PHPUnit 9/10). All final assets are built into the image, because the image does not have network access once in use.
 
 Includes php extensions: ds, intl
 
@@ -22,8 +22,4 @@ Test running a solution is coordinated by a bash script at `bin/run.sh` taking 3
 
 ### JUnit to JSON
 
-PHPUnit can natively output tests run to junit xml format, but Exercism requires output in json format. A typescript-based app is located in the `junit-to-json` folder which is compiled to javascript when the image is built. It provides a translation layer from one format to the other.
-
-```text
-> node junit-to-json/dist/index.js <path to xml input> <path for json output>
-```
+PHPUnit can natively output tests run to junit xml format, but Exercism requires output in json format. A php-based app is located in the `junit-handler` folder. It provides a translation layer from one format to the other incorporating task_id identification and test code inclusion.
