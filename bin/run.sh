@@ -7,18 +7,22 @@ XML_RESULTS='results.xml'
 JSON_RESULTS='results.json'
 
 function main {
-  exercise_slug="${1}"
-  solution_dir="${2}"
-  output_dir="${3}"
+  local output=""
+  local test_files=""
+  local -i phpunit_exit_code
+
+  # local exercise_slug="${1}"
+  local solution_dir="${2}"
+  local output_dir="${3}"
   test_files=$(find "${solution_dir}" -type f -name '*Test.php' | tr '\n' ' ')
 
   set +e
-  if ! PHP_OUTPUT=$(php -l "${solution_dir}"/*.php 2>&1 1>/dev/null); then
-    jo version=3 status=error message="${PHP_OUTPUT/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
+  if ! output=$(php -l "${solution_dir}"/*.php 2>&1 1>/dev/null); then
+    jo version=3 status=error message="${output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
     return 0;
   fi
 
-  phpunit_output=$(eval "${PHPUNIT_BIN}" \
+  output=$(eval "${PHPUNIT_BIN}" \
     -d memory_limit=300M \
     --log-junit "${output_dir%/}/${XML_RESULTS}" \
     --verbose \
@@ -29,7 +33,7 @@ function main {
   set -e
 
   if [[ "${phpunit_exit_code}" -eq 255 ]]; then
-    jo version=3 status=error message="${phpunit_output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
+    jo version=3 status=error message="${output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
     return 0;
   fi
 
@@ -39,6 +43,8 @@ function main {
 }
 
 function installed {
+  local cmd
+
   cmd=$(command -v "${1}")
 
   [[ -n "${cmd}" ]] && [[ -f "${cmd}" ]]
