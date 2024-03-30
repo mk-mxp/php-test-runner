@@ -13,6 +13,11 @@ function main {
   test_files=$(find "${solution_dir}" -type f -name '*Test.php' | tr '\n' ' ')
 
   set +e
+  if ! PHP_OUTPUT=$(php -l "${solution_dir}"/*.php 2>&1 1>/dev/null); then
+    jo version=3 status=error message="${PHP_OUTPUT/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
+    return 0;
+  fi
+
   phpunit_output=$(eval "${PHPUNIT_BIN}" \
     -d memory_limit=300M \
     --log-junit "${output_dir%/}/${XML_RESULTS}" \
