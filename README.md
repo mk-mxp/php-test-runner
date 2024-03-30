@@ -2,18 +2,15 @@
 
 # PHP Test Runner
 
-TODO: This seems to be outdated, but I don't know the current state:
-
-This is a minimal test runner for Exercism's v3 platform.
-It meets the minimal spec for testing _practice exercises_.
-It does not currently parse the test case code being run, therefore it does not meet the standard for testing _concept exercises_.
+This is the test runner for Exercism's v3 platform.
+It meets the complete spec for testing all exercises.
 
 ## Basic components
 
 ### Docker image
 
 The website uses isolated docker images to run untrusted code in a sandbox.
-Image consists of PHP 8.2.7 (PHPUnit 9/10).
+The image provided by this repository consists of PHP 8.2.7 (PHPUnit 9/10).
 All final assets are built into the image, because the image does not have network access once in use.
 
 Includes PHP extensions: ds, intl
@@ -30,7 +27,7 @@ This is what runs inside the production Docker image when students submit their 
 
 ### Testing the test runner
 
-In `./tests/` are golden tests to verify test runner behaves as expected.
+In `./tests/` are golden tests to verify that the test runner behaves as expected.
 The CI uses `bin/run-tests.sh` to execute them.
 
 ### Running tests in Docker locally
@@ -40,6 +37,6 @@ Use `bin/run-in-docker.sh <test-slug> <directory path to solution> <directory pa
 
 ### JUnit to JSON
 
-PHPUnit can natively output tests run to JUnit XML format, but Exercism requires output in json format.
+PHPUnit can natively output tests run to JUnit XML format, but Exercism requires output in JSON format.
 A PHP-based app is located in the `junit-handler` folder.
 It provides a translation layer from one format to the other incorporating `task_id` identification and test code inclusion.
