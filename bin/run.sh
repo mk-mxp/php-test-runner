@@ -29,7 +29,7 @@ function main {
   set -e
 
   if [[ "${phpunit_exit_code}" -eq 255 ]]; then
-    jo version=2 status=error message="${phpunit_output}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
+    jo version=3 status=error message="${phpunit_output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
     return 0;
   fi
 
