@@ -32,6 +32,9 @@ function main {
   phpunit_exit_code=$?
   set -e
 
+  # This is only a theoretical failure case. This exit code is generated, when
+  # PHPUnit fails to catch some issue in its internals. It cannot be provoked
+  # by us for testing our code
   if [[ "${phpunit_exit_code}" -eq 255 ]]; then
     jo version=3 status=error message="${output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${JSON_RESULTS}"
     return 0;
