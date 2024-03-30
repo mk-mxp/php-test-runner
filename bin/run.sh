@@ -41,7 +41,7 @@ function installed {
 }
 
 function die {
-  >&2 echo "❌ Fatal: ${@}"
+  >&2 echo "❌ Fatal: $*"
   exit 1
 }
 
