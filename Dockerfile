@@ -13,10 +13,11 @@ RUN curl -L -o phpunit-10.phar https://phar.phpunit.de/phpunit-10.phar && \
   chmod +x phpunit-10.phar
 
 WORKDIR /usr/local/bin/junit-handler/
-COPY --from=composer:2.5.8 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
 COPY junit-handler/ .
 # We need PHPUnit from junit-handler/ to run test-runner tests in CI / locally
-RUN composer install --no-interaction
+# composer warns about missing a "root version" to resolve dependencies. Fake to stop warning
+RUN COMPOSER_ROOT_VERSION=1.0.0 composer install --no-interaction
 
 FROM php:8.3.4-cli-alpine3.19 AS runtime
 
