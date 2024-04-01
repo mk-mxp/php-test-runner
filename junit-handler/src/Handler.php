@@ -14,6 +14,7 @@ class Handler
     private const STATUS_ERROR = 'error';
     private const STATUS_PASS = 'pass';
     private const STATUS_FAIL = 'fail';
+    private string $test_file_path = '';
 
     public function run(string $xml_path, $json_path): void
     {
@@ -38,6 +39,9 @@ class Handler
 
         $test_class = $testsuite_attrs['name'];
         $test_file_path = $testsuite_attrs['file'];
+        $test_file_name = \basename($test_file_path);
+        $this->test_file_path = \str_replace($test_file_name, '', $test_file_path);
+
 
         $testcase_error_count = (int) $testsuite_attrs['errors'];
         $testcase_failure_count = (int) $testsuite_attrs['failures'];
@@ -165,10 +169,10 @@ class Handler
                     $output['output'] = (string) $data;
                 } elseif ($name === 'error') {
                     $output['status'] = self::STATUS_ERROR;
-                    $output['message'] = (string) $data;
+                    $output['message'] = \str_replace($this->test_file_path, '', (string) $data);
                 } elseif ($name === 'failure') {
                     $output['status'] = self::STATUS_FAIL;
-                    $output['message'] = (string) $data;
+                    $output['message'] = \str_replace($this->test_file_path, '', (string) $data);
                 }
             }
 
