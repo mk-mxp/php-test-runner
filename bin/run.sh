@@ -21,7 +21,7 @@ function main {
 
   set +e
   if ! output=$(php -l "${solution_dir}"/*.php 2>&1 1>/dev/null); then
-    jo version=3 status=error message="${output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${EXERCISM_RESULTS}"
+    jo version=3 status=error message="${output//"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${EXERCISM_RESULTS}"
     return 0;
   fi
 
@@ -45,8 +45,17 @@ function main {
   # PHPUnit fails to catch some issue in its internals. It cannot be provoked
   # by us for testing our code
   if [[ "${phpunit_exit_code}" -eq 255 ]]; then
-    jo version=3 status=error message="${output/"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${EXERCISM_RESULTS}"
+    jo version=3 status=error message="${output//"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${EXERCISM_RESULTS}"
     return 0;
+  fi
+
+  # This catches runtime errors in "global student code" (during `require_once`)
+  if [[ "${phpunit_exit_code}" -eq 2 ]]; then
+    if ! grep -q '<testcase' "${output_dir%/}/${JUNIT_RESULTS}"; then
+        output="${output#*" MB"}"
+        jo version=3 status=error message="${output//"$solution_dir/"/""}" tests="[]" > "${output_dir%/}/${EXERCISM_RESULTS}"
+        return 0;
+    fi
   fi
 
   php junit-handler/run.php \
