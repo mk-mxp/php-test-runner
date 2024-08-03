@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Synopsis:
-# Test the test runner by running it against a predefined set of solutions 
+# Test the test runner by running it against a predefined set of solutions
 # with an expected output.
 
 # Output:
@@ -26,7 +26,7 @@ for test_dir in tests/*; do
     bin/run.sh "${test_dir_name}" "${test_dir_path}" "${output_dir_path}"
 
     # OPTIONAL: Normalize the results file
-    # If the results.json file contains information that changes between 
+    # If the results.json file contains information that changes between
     # different test runs (e.g. timing information or paths), you should normalize
     # the results file to allow the diff comparison below to work as expected
     # sed -i -E \
@@ -34,12 +34,13 @@ for test_dir in tests/*; do
     #   -e "s~${test_dir_path}~/solution~g" \
     #   "${results_file_path}"
 
-    echo "${test_dir_name}: comparing results.json to expected_results.json"
-    diff "${results_file_path}" "${expected_results_file_path}"
+    # Normalize the object ID of `var_dump(new stdClass())`
+    sed -i -E \
+        -e 's/(object\(stdClass\))(#[[:digit:]]+)/\1#79/g' \
+        "${results_file_path}"
 
-    if [ $? -ne 0 ]; then
-        exit_code=1
-    fi
+    echo "${test_dir_name}: comparing results.json to expected_results.json"
+    diff "${results_file_path}" "${expected_results_file_path}" || exit_code=1
 done
 
 exit ${exit_code}
