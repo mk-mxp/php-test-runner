@@ -1,22 +1,11 @@
-# Ignore git details
-.git
-.gitignore
-.github
+# Disallow everything
+*
 
-# Ignore run artifacts
-error_log
-metadata.json
-output
-output.json
-results.xml
-results.json
-
-# Ignore smoke test files
-test/
-
-junit-to-json/node_modules/
-junit-to-json/**/*.js
-.appends
-.gitattributes
-.dockerignore
-Dockerfile
+# Allow list
+!bin/run.sh
+!CODE_OF_CONDUCT.md
+!composer.json
+!LICENSE
+!phpunit.xml
+!README.md
+!src
